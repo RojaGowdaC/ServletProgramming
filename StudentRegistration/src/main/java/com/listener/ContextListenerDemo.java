@@ -2,6 +2,11 @@ package com.listener;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.io.FileNotFoundException;
 
 public class ContextListenerDemo implements ServletContextListener
 {
@@ -17,7 +22,19 @@ public class ContextListenerDemo implements ServletContextListener
         ServletContext servletContext = servletContextEvent.getServletContext();
 
         System.out.println(servletContext + " is Initialized or Created");
+        String path = servletContext.getInitParameter("path");
 
+
+        try {
+            InputStream in = new FileInputStream(path);
+            Properties prop = new Properties();
+            prop.load(in);
+            servletContext.setAttribute("properties",prop);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("\n#####################################\n");
 
         /*
@@ -41,10 +58,7 @@ public class ContextListenerDemo implements ServletContextListener
 
         System.out.println("\n#####################################\n");
 
-        /*
-         * If ServletContext is Destroyed, based on that if you want to perform
-         * any operation then you can do it here.
-         */
+
 
     }
 
